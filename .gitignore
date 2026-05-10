@@ -9,6 +9,7 @@ prisma/dev.db
 *.tsbuildinfo
 .pnpm-debug.log
 .tools
+docs/.obsidian/
 
 # Swift / iOS
 Traveloop.swiftpm/.build

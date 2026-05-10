@@ -4,7 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import { verifyPassword } from "@/lib/password";
 
 const credentialsSchema = z.object({
