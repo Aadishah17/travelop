@@ -1,5 +1,5 @@
 import { ok, serverError } from "@/lib/api-response";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
 

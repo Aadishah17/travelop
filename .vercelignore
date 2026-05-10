@@ -3,6 +3,7 @@
 .next
 node_modules
 .tools
+docs/.obsidian
 *.log
 *.tsbuildinfo
 coverage
