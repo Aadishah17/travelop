@@ -39,6 +39,13 @@ const navItems = [
   { href: "/settings", label: "Settings", icon: Settings }
 ];
 
+function isNavItemActive(pathname: string, href: string) {
+  if (pathname === href) return true;
+  if (href === "/dashboard" || href === "/trips/new") return false;
+  if (href === "/trips") return pathname.startsWith("/trips/") && !pathname.startsWith("/trips/new");
+  return pathname.startsWith(`${href}/`);
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { data: session, status } = useSession();
@@ -65,7 +72,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <nav className="flex flex-1 flex-col gap-1 p-3">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+            const active = isNavItemActive(pathname, item.href);
             return (
               <Link
                 href={item.href}
@@ -133,7 +140,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <nav className="fixed inset-x-3 bottom-3 z-50 grid grid-cols-5 rounded-lg border bg-white/95 p-1 shadow-glass backdrop-blur-xl lg:hidden">
         {navItems.slice(0, 5).map((item) => {
           const Icon = item.icon;
-          const active = pathname === item.href;
+          const active = isNavItemActive(pathname, item.href);
           return (
             <Link
               href={item.href}

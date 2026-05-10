@@ -18,6 +18,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
           alt="Coastal travel landscape"
           fill
           priority
+          sizes="(min-width: 1024px) 47vw, 0vw"
           className="object-cover opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/20 to-transparent" />
