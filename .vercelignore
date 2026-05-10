@@ -1,0 +1,14 @@
+.env
+.env*.local
+.next
+node_modules
+.tools
+*.log
+*.tsbuildinfo
+coverage
+dist
+Traveloop-Android/.gradle
+Traveloop-Android/**/build
+Traveloop-Android/local.properties
+Traveloop.swiftpm/.build
+Traveloop.swiftpm/.swiftpm

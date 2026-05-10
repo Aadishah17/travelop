@@ -19,3 +19,5 @@ Traveloop-Android/.gradle/
 Traveloop-Android/build/
 Traveloop-Android/*/build/
 Traveloop-Android/local.properties
+
+.vercel
