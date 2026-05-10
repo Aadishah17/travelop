@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Traveloop</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_title">Plan with AI</string>
+    <string name="onboarding_subtitle">Generate perfect multi-city itineraries in seconds. Our AI analyzes millions of routes to build your effortless journey.</string>
+    <string name="onboarding_get_started">Get Started</string>
+</resources>

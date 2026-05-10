@@ -1,0 +1,21 @@
+node_modules
+.next
+.env
+.env*.local
+dist
+coverage
+*.log
+prisma/dev.db
+*.tsbuildinfo
+.pnpm-debug.log
+.tools
+
+# Swift / iOS
+Traveloop.swiftpm/.build
+Traveloop.swiftpm/.swiftpm
+
+# Android
+Traveloop-Android/.gradle/
+Traveloop-Android/build/
+Traveloop-Android/*/build/
+Traveloop-Android/local.properties
