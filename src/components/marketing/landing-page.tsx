@@ -128,8 +128,17 @@ export function LandingPage() {
                       <MapPinned className="size-4 text-primary" />
                       Route preview
                     </div>
-                    <div className="relative h-48 overflow-hidden rounded-md bg-slate-100">
-                      <Image src="/reference/crops/untitled-crop-4.png" alt="Traveloop reference design preview" fill className="object-cover" />
+                    <div className="relative h-48 overflow-hidden rounded-md bg-[linear-gradient(135deg,#e0f2fe_0%,#f0fdfa_48%,#dbeafe_100%)]">
+                      <div className="absolute left-8 top-8 h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_0_6px_rgba(37,99,235,0.12)]" />
+                      <div className="absolute right-10 top-16 h-2.5 w-2.5 rounded-full bg-emerald shadow-[0_0_0_6px_rgba(16,185,129,0.14)]" />
+                      <div className="absolute bottom-10 left-24 h-2.5 w-2.5 rounded-full bg-sky shadow-[0_0_0_6px_rgba(14,165,233,0.14)]" />
+                      <div className="absolute left-10 right-12 top-12 h-24 rounded-[45%] border-2 border-dashed border-primary/45 border-b-transparent border-l-transparent" />
+                      <div className="absolute bottom-5 left-5 right-5 grid grid-cols-3 gap-2 text-[10px] font-bold text-navy/70">
+                        <span>Tokyo</span>
+                        <span className="text-center">Kyoto</span>
+                        <span className="text-right">Osaka</span>
+                      </div>
+                      <div className="absolute inset-x-4 bottom-9 h-px bg-white/70" />
                     </div>
                   </div>
                   <div className="grid gap-3">
@@ -217,7 +226,13 @@ export function LandingPage() {
               {destinations.map((destination) => (
                 <Card className="group overflow-hidden" key={destination.city}>
                   <div className="relative h-56">
-                    <Image src={destination.image} alt={`${destination.city}, ${destination.country}`} fill className="object-cover transition duration-500 group-hover:scale-105" />
+                    <Image
+                      src={destination.image}
+                      alt={`${destination.city}, ${destination.country}`}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                    />
                   </div>
                   <CardContent className="flex items-center justify-between p-4">
                     <div>

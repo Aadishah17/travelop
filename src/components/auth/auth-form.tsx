@@ -112,7 +112,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </div>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="grid gap-4" method="post" onSubmit={form.handleSubmit(onSubmit)}>
           {searchParams.get("error") ? (
             <div className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
               Authentication failed. Please check your credentials and try again.

@@ -526,7 +526,7 @@ function AnalyticsCharts({ analytics }: { analytics: ReturnType<typeof buildAnal
         </CardHeader>
         <CardContent className="h-80">
           {analytics.categoryData.length ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <PieChart>
                 <Pie data={analytics.categoryData} dataKey="total" nameKey="label" innerRadius={62} outerRadius={104} paddingAngle={3}>
                   {analytics.categoryData.map((entry) => <Cell key={entry.category} fill={entry.color} />)}
@@ -543,7 +543,7 @@ function AnalyticsCharts({ analytics }: { analytics: ReturnType<typeof buildAnal
           <CardTitle>Daily spending graph</CardTitle>
         </CardHeader>
         <CardContent className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <BarChart data={analytics.dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="label" tick={{ fontSize: 12 }} />
@@ -561,7 +561,7 @@ function AnalyticsCharts({ analytics }: { analytics: ReturnType<typeof buildAnal
           <CardTitle>Expense trend</CardTitle>
         </CardHeader>
         <CardContent className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <LineChart data={analytics.dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="label" tick={{ fontSize: 12 }} />

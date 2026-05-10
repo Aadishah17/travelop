@@ -417,7 +417,7 @@ export function DashboardClient() {
             </CardHeader>
             <CardContent className="h-64">
               {chartData.length ? (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                   <PieChart>
                     <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={52} outerRadius={86}>
                       {chartData.map((entry, index) => (
@@ -841,31 +841,45 @@ function TripForm({
   const pending = isSubmitting || isUploading;
 
   return (
-    <form className="grid gap-5" onSubmit={form.handleSubmit(handleSubmit)}>
+    <form className="grid gap-5" method="post" onSubmit={form.handleSubmit(handleSubmit)}>
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Trip title" error={form.formState.errors.title?.message}>
-          <Input placeholder="Summer city loop" {...form.register("title")} />
+        <Field label="Trip title" htmlFor="trip-title" error={form.formState.errors.title?.message}>
+          <Input id="trip-title" placeholder="Summer city loop" {...form.register("title")} />
         </Field>
-        <Field label="Budget" error={form.formState.errors.budget?.message}>
-          <Input type="number" min="0" step="1" {...form.register("budget")} />
+        <Field label="Budget" htmlFor="trip-budget" error={form.formState.errors.budget?.message}>
+          <Input id="trip-budget" type="number" min="0" step="1" {...form.register("budget")} />
         </Field>
-        <Field label="Start date" error={form.formState.errors.startDate?.message}>
-          <Input type="date" {...form.register("startDate")} />
+        <Field label="Start date" htmlFor="trip-start-date" error={form.formState.errors.startDate?.message}>
+          <Input
+            id="trip-start-date"
+            type="date"
+            {...form.register("startDate")}
+            onInput={(event) => {
+              form.setValue("startDate", event.currentTarget.value, { shouldDirty: true, shouldValidate: true });
+            }}
+          />
         </Field>
-        <Field label="End date" error={form.formState.errors.endDate?.message}>
-          <Input type="date" {...form.register("endDate")} />
+        <Field label="End date" htmlFor="trip-end-date" error={form.formState.errors.endDate?.message}>
+          <Input
+            id="trip-end-date"
+            type="date"
+            {...form.register("endDate")}
+            onInput={(event) => {
+              form.setValue("endDate", event.currentTarget.value, { shouldDirty: true, shouldValidate: true });
+            }}
+          />
         </Field>
       </div>
-      <Field label="Description" error={form.formState.errors.description?.message}>
-        <Textarea placeholder="What kind of journey are you planning?" {...form.register("description")} />
+      <Field label="Description" htmlFor="trip-description" error={form.formState.errors.description?.message}>
+        <Textarea id="trip-description" placeholder="What kind of journey are you planning?" {...form.register("description")} />
       </Field>
       <div className="grid gap-4 md:grid-cols-[1fr_180px]">
         <div className="grid gap-4">
-          <Field label="Cover image URL" error={form.formState.errors.coverImage?.message}>
-            <Input placeholder="https://images.example.com/trip-cover.jpg" {...form.register("coverImage")} />
+          <Field label="Cover image URL" htmlFor="trip-cover-image" error={form.formState.errors.coverImage?.message}>
+            <Input id="trip-cover-image" placeholder="https://images.example.com/trip-cover.jpg" {...form.register("coverImage")} />
           </Field>
-          <Field label="Cover photo upload">
-            <Input type="file" accept="image/*" onChange={(event) => setCoverFile(event.target.files?.[0] ?? null)} />
+          <Field label="Cover photo upload" htmlFor="trip-cover-upload">
+            <Input id="trip-cover-upload" type="file" accept="image/*" onChange={(event) => setCoverFile(event.target.files?.[0] ?? null)} />
           </Field>
         </div>
         <div
@@ -903,10 +917,10 @@ function TripForm({
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({ label, htmlFor, error, children }: { label: string; htmlFor?: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-2">
-      <Label>{label}</Label>
+      <Label htmlFor={htmlFor}>{label}</Label>
       {children}
       {error ? <p className="text-xs text-destructive">{error}</p> : null}
     </div>

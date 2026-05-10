@@ -26,7 +26,7 @@ export function BudgetAnalytics({ data, currency = "USD", className }: BudgetAna
         <p className="mt-1 text-sm text-slate-500">Planned and actual spend by category.</p>
       </div>
       <div className="h-72">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={data} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
             <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "#64748B", fontSize: 12 }} />
