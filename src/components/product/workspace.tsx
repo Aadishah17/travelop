@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, differenceInCalendarDays } from "date-fns";
 import { motion } from "framer-motion";
 import {
   AlertTriangle,
+  Camera,
   CalendarDays,
   CloudSun,
   DollarSign,
@@ -52,6 +53,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/utils";
+import { getDestinationImageUrl } from "@/lib/destination-photos";
 
 const BudgetWorkspace = dynamic(() => import("@/features/budget/budget-workspace").then((mod) => mod.BudgetWorkspace), {
   loading: () => <LoadingGrid />,
@@ -189,6 +191,7 @@ function useTrips() {
 const tripFormSchema = z
   .object({
     title: z.string().trim().min(2, "Trip title must be at least 2 characters.").max(140),
+    destination: z.string().trim().max(180).optional(),
     description: z.string().trim().max(2000).optional(),
     budget: z.coerce.number().min(0, "Budget cannot be negative."),
     startDate: z.string().min(1, "Choose a start date."),
@@ -204,6 +207,7 @@ type TripFormValues = z.infer<typeof tripFormSchema>;
 
 const defaultTripValues: TripFormValues = {
   title: "",
+  destination: "",
   description: "",
   budget: 2500,
   startDate: "",
@@ -224,6 +228,7 @@ function tripCover(trip: ApiTrip) {
 function tripToFormValues(trip: ApiTrip): TripFormValues {
   return {
     title: trip.title,
+    destination: trip.destination ?? "",
     description: trip.description ?? "",
     budget: Number(trip.budget ?? 0),
     startDate: toDateInput(tripStart(trip)),
@@ -239,6 +244,7 @@ function dateInputToIso(value: string) {
 function tripPayload(values: TripFormValues) {
   return {
     title: values.title,
+    destination: values.destination?.trim() || values.title,
     description: values.description?.trim() || null,
     budget: Number(values.budget ?? 0),
     startDate: dateInputToIso(values.startDate),
@@ -682,7 +688,9 @@ function TripCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
-  const cover = tripCover(trip);
+  const explicitCover = tripCover(trip);
+  const autoCover = !explicitCover && trip.destination ? getDestinationImageUrl(trip.destination) : null;
+  const cover = explicitCover || autoCover || "";
   const start = new Date(tripStart(trip));
   const end = new Date(tripEnd(trip));
   const stopCount = trip.stops?.length ?? 0;
@@ -807,11 +815,51 @@ function TripForm({
 }) {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isResolvingPhoto, setIsResolvingPhoto] = useState(false);
+  const [resolvedLandmark, setResolvedLandmark] = useState<string | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const form = useForm<TripFormValues>({
     resolver: zodResolver(tripFormSchema),
     defaultValues: trip ? tripToFormValues(trip) : defaultTripValues,
   });
   const coverPreview = form.watch("coverImage");
+  const destinationValue = form.watch("destination");
+
+  const fetchDestinationPhoto = useCallback(
+    async (dest: string) => {
+      if (!dest || dest.length < 2) {
+        setResolvedLandmark(null);
+        return;
+      }
+      setIsResolvingPhoto(true);
+      try {
+        const res = await fetch(`/api/destination-photo?q=${encodeURIComponent(dest)}`);
+        const json = await res.json();
+        if (json?.data?.imageUrl) {
+          const currentCover = form.getValues("coverImage");
+          if (!currentCover || !coverFile) {
+            form.setValue("coverImage", json.data.imageUrl, { shouldDirty: true });
+          }
+          setResolvedLandmark(`${json.data.landmark}, ${json.data.city}`);
+        } else {
+          setResolvedLandmark(null);
+        }
+      } catch {
+        setResolvedLandmark(null);
+      } finally {
+        setIsResolvingPhoto(false);
+      }
+    },
+    [form, coverFile]
+  );
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (destinationValue) fetchDestinationPhoto(destinationValue);
+    }, 500);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [destinationValue, fetchDestinationPhoto]);
 
   async function handleSubmit(values: TripFormValues) {
     let nextValues = values;
@@ -846,6 +894,21 @@ function TripForm({
         <Field label="Trip title" htmlFor="trip-title" error={form.formState.errors.title?.message}>
           <Input id="trip-title" placeholder="Summer city loop" {...form.register("title")} />
         </Field>
+        <Field label="Destination" htmlFor="trip-destination" error={form.formState.errors.destination?.message}>
+          <div className="relative">
+            <Input id="trip-destination" placeholder="e.g. Paris, Tokyo, London..." {...form.register("destination")} />
+            {isResolvingPhoto ? (
+              <Loader2 className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+            ) : resolvedLandmark ? (
+              <Camera className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-emerald-500" />
+            ) : null}
+          </div>
+          {resolvedLandmark ? (
+            <p className="text-xs text-emerald-600">📸 Auto-attached: {resolvedLandmark}</p>
+          ) : null}
+        </Field>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="Budget" htmlFor="trip-budget" error={form.formState.errors.budget?.message}>
           <Input id="trip-budget" type="number" min="0" step="1" {...form.register("budget")} />
         </Field>
