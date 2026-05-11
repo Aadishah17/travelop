@@ -101,10 +101,10 @@ export function LandingPage() {
                   <Link href="/shared">Explore Trips</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10">
-                  <Link href="/download/android">
+                  <a href="/download/android">
                     <Smartphone className="mr-2 size-4" />
                     Android App
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </motion.div>
