@@ -837,7 +837,7 @@ function TripForm({
         const json = await res.json();
         if (json?.data?.imageUrl) {
           const currentCover = form.getValues("coverImage");
-          if (!currentCover || !coverFile) {
+          if (!currentCover && !coverFile) {
             form.setValue("coverImage", json.data.imageUrl, { shouldDirty: true });
           }
           setResolvedLandmark(`${json.data.landmark}, ${json.data.city}`);
