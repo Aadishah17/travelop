@@ -4,6 +4,9 @@
     <strong>Plan smarter journeys — itineraries, budgets, packing, and sharing in one place.</strong>
   </p>
   <p align="center">
+    <a href="https://travelop-six.vercel.app"><img src="https://img.shields.io/badge/🚀_Live_Demo-travelop--six.vercel.app-blue?style=for-the-badge" alt="Live Demo" /></a>
+  </p>
+  <p align="center">
     <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-15.5-black?logo=next.js" alt="Next.js" /></a>
     <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React" /></a>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white" alt="TypeScript" /></a>
@@ -19,6 +22,8 @@
 **Traveloop** is a production-grade travel planning SaaS built with the **Next.js 15 App Router**, **React 19**, **TypeScript**, **Tailwind CSS**, **Prisma**, **Neon PostgreSQL**, **NextAuth**, **TanStack Query**, **Framer Motion**, and **Recharts**.
 
 It helps travelers organize trips by building daily itineraries, managing budgets, tracking packing lists, keeping travel journals, and sharing plans with friends or family — available on **Web**, **Android**, and **iOS**.
+
+> 🌐 **Live at:** [https://travelop-six.vercel.app](https://travelop-six.vercel.app)
 
 ---
 
